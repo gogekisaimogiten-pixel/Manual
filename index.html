@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <title>語劇祭 模擬店 統括マニュアル（パスワード保護）</title>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1520;
+      --card:#111a27;
+      --text:#e8eef7;
+      --muted:#a8b4c7;
+      --line:#223045;
+      --accent:#6cc6ff;
+      --ok:#88ffbb;
+      --warn:#ffcc66;
+      --danger:#ff7777;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:14px;
+      --radius2:12px;
+      --maxw: 1100px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(108,198,255,.12), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 20%, rgba(255,204,102,.10), transparent 60%),
+                  radial-gradient(900px 700px at 50% 100%, rgba(136,255,187,.08), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: rgba(15,21,32,.78);
+      border-bottom:1px solid var(--line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .topbar-inner{
+      max-width: var(--maxw);
+      margin:0 auto;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width: 200px;
+    }
+    .brand b{ font-size:14px; letter-spacing:.2px; }
+    .brand span{ font-size:12px; color:var(--muted); }
+
+    .search{
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: rgba(17,26,39,.85);
+      border:1px solid rgba(34,48,69,.9);
+      border-radius: 999px;
+      padding:10px 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    }
+    .search svg{ flex:0 0 auto; opacity:.85 }
+    .search input{
+      width:100%;
+      border:0;
+      outline:0;
+      background:transparent;
+      color:var(--text);
+      font-size:14px;
+    }
+    .search .hint{
+      flex:0 0 auto;
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(168,180,199,.25);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+
+    .btn{
+      border:1px solid rgba(34,48,69,.85);
+      background: rgba(17,26,39,.55);
+      color:var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn:hover{ background: rgba(17,26,39,.8); }
+    .btn.danger{ border-color: rgba(255,119,119,.55); }
+
+    .wrap{
+      max-width: var(--maxw);
+      margin:0 auto;
+      padding: 16px 14px 80px;
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    .sidebar{
+      position: sticky;
+      top: 64px;
+      padding: 12px;
+      background: rgba(15,21,32,.70);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+    .nav-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 4px 2px 10px;
+    }
+    .nav-title b{ font-size:13px; }
+    .chip{
+      font-size:11px;
+      color:var(--muted);
+      border:1px solid rgba(168,180,199,.22);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .nav a{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:8px 10px;
+      border-radius: 10px;
+      border:1px solid transparent;
+      color:var(--text);
+      opacity:.95;
+    }
+    .nav a:hover{
+      background: rgba(17,26,39,.65);
+      border-color: rgba(34,48,69,.7);
+      text-decoration:none;
+    }
+    .nav a .dot{
+      width:8px;height:8px;border-radius:999px;
+      margin-top:7px;
+      background: rgba(108,198,255,.9);
+      box-shadow: 0 0 0 3px rgba(108,198,255,.12);
+      flex:0 0 auto;
+    }
+    .nav a small{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.35;
+      margin-top:1px;
+    }
+
+    .content{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-width: 0;
+    }
+    .hero{
+      padding: 16px 16px 14px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17,26,39,.75), rgba(15,21,32,.65));
+      box-shadow: var(--shadow);
+    }
+    .hero h1{
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .card{
+      padding: 14px 14px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(17,26,39,.72);
+      box-shadow: var(--shadow);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pill{
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid rgba(168,180,199,.22);
+      color:var(--muted);
+    }
+    .callout{
+      border-radius: var(--radius2);
+      padding: 12px 12px 10px;
+      border:1px solid rgba(34,48,69,.9);
+      background: rgba(15,26,43,.55);
+    }
+    .callout.ok{ border-left:4px solid var(--ok); }
+    .callout.warn{ border-left:4px solid var(--warn); }
+    .callout.danger{ border-left:4px solid var(--danger); }
+    .callout b{ display:block; margin-bottom:4px; }
+
+    .list{ margin:0; padding-left: 1.1em; }
+    .list li{ margin: 6px 0; }
+    .muted{ color:var(--muted); }
+
+    .timeline{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin: 10px 0 0;
+    }
+    .tbtn{
+      cursor:pointer;
+      border:1px solid rgba(34,48,69,.85);
+      background: rgba(17,26,39,.55);
+      color:var(--text);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      opacity:.95;
+      user-select:none;
+    }
+    .tbtn:hover{ background: rgba(17,26,39,.8); }
+
+    .section{ scroll-margin-top: 84px; }
+    .hr{ height:1px; background: var(--line); margin: 10px 0; }
+
+    .searchResults{ display:none; margin-top:10px; }
+    .searchResults.active{ display:block; }
+    .resultItem{
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(34,48,69,.85);
+      background: rgba(17,26,39,.55);
+      margin-top:8px;
+    }
+    .resultItem b{ display:block; font-size:13px; }
+    .resultItem small{ display:block; color:var(--muted); margin-top:3px; }
+
+    /* ロック画面 */
+    .lockwrap{
+      max-width: 640px;
+      margin: 56px auto;
+      padding: 0 14px;
+    }
+    .lockcard{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(17,26,39,.72);
+      box-shadow: var(--shadow);
+      padding: 16px 16px 14px;
+    }
+    .lockcard h1{ margin:0 0 6px; font-size:18px; }
+    .lockcard p{ margin:0 0 12px; color:var(--muted); font-size:13px; }
+    .lockrow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .lockrow input{
+      flex:1;
+      border:1px solid rgba(34,48,69,.9);
+      background: rgba(15,21,32,.85);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    .lockrow input:focus{
+      border-color: rgba(108,198,255,.7);
+      box-shadow: 0 0 0 3px rgba(108,198,255,.10);
+    }
+    .lockmeta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:10px;
+      gap:10px;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .chk{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+    }
+    .err{
+      margin-top:10px;
+      color: var(--danger);
+      font-size:12px;
+      display:none;
+    }
+    .err.show{ display:block; }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; }
+      .sidebar{ position: relative; top:auto; }
+      .brand{ min-width: unset; }
+      .search .hint{ display:none; }
+    }
+
+    /* iOS Safari fix (安定優先) */
+    @supports (-webkit-touch-callout: none) {
+      body{ background: var(--bg) !important; }
+      .card, .sidebar, .topbar, .lockcard{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+      .wrap{ display:block !important; }
+      .sidebar{ position:relative !important; top:auto !important; margin-bottom:14px; }
+      *{ text-shadow:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== ロック画面 ===== -->
+  <div id="lockScreen" class="lockwrap" aria-live="polite">
+    <div class="lockcard">
+      <h1>🔒 このマニュアルはパスワードが必要です</h1>
+      <p>統括向けの内容（機密/注意事項）を含みます。関係者のみ閲覧してください。</p>
+
+      <div class="lockrow">
+        <input id="pw" type="password" placeholder="パスワードを入力" autocomplete="current-password" />
+        <button id="unlockBtn" class="btn">開く</button>
+      </div>
+
+      <div class="lockmeta">
+        <label class="chk"><input id="remember" type="checkbox"> この端末で記憶</label>
+        <button id="helpHashBtn" class="btn" type="button" title="初期設定用">管理者：ハッシュ作成</button>
+      </div>
+
+      <div id="err" class="err">パスワードが違います。</div>
+
+      <div class="hr"></div>
+  
+    </div>
+  </div>
+
+  <!-- ===== 本体（ロック解除後に表示） ===== -->
+  <div id="app" style="display:none">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <b>語劇祭 模擬店 統括マニュアル</b>
+          <span>パスワード保護 / 検索・時系列・iOS対応</span>
+        </div>
+
+        <div class="search" title="検索（本文内）">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="q" type="search" placeholder="キーワード検索（例：給湯ポット / 企画書 / ゴミ / 1階 / 電子決済）" />
+          <span class="hint">Enter</span>
+        </div>
+
+        <button id="logoutBtn" class="btn danger" title="この端末の記憶も消します">ログアウト</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <aside class="sidebar">
+        <div class="nav-title">
+          <b>目次</b>
+          <span class="chip">統括用</span>
+        </div>
+
+        <nav class="nav" id="nav">
+          <a href="#intro"><span class="dot"></span><div><b>はじめに</b><small>役割・大切なこと</small></div></a>
+          <a href="#flow"><span class="dot"></span><div><b>基本フロー</b><small>募集→本番まで</small></div></a>
+          <a href="#recruit"><span class="dot"></span><div><b>募集（7〜8月）</b><small>説明会・フォーム・名簿</small></div></a>
+          <a href="#proposal"><span class="dot"></span><div><b>企画書（8〜10月）</b><small>締切・修正・管理</small></div></a>
+          <a href="#docs"><span class="dot"></span><div><b>書類・申請（10月）</b><small>借用/施設/家電/配置</small></div></a>
+          <a href="#shift"><span class="dot"></span><div><b>シフト（11月中旬）</b><small>巡回・ゴミ・不審者</small></div></a>
+          <a href="#notice"><span class="dot"></span><div><b>本番前 周知（必読）</b><small>抜け漏れゼロ案内</small></div></a>
+          <a href="#daybefore"><span class="dot"></span><div><b>前日準備</b><small>設営・ゴミ箱・養生</small></div></a>
+          <a href="#onsite"><span class="dot"></span><div><b>本番当日</b><small>持ち物・停止判断</small></div></a>
+          <a href="#wrapup"><span class="dot"></span><div><b>終了後</b><small>売上回収・引き継ぎ</small></div></a>
+          <a href="#faq"><span class="dot"></span><div><b>疑問点まとめ</b><small>例外・前例・注意</small></div></a>
+        </nav>
+
+        <div class="hr"></div>
+        <div class="muted" style="font-size:12px">
+          🔎 検索：上の検索欄 → Enter<br/>
+          ※必要箇所に即ジャンプできる設計
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="hero">
+          <h1>語劇祭 模擬店（統括）マニュアル：統合版</h1>
+          <p>ナナメ読み→当日は目次/検索で該当箇所へ。抜け漏れ防止の「本番前周知」は必読。</p>
+        </div>
+
+        <div class="searchResults" id="results"></div>
+
+        <!-- ======= ここから下に本文を全部入れる（例として主要章を入れてある） ======= -->
+
+        <section class="card section" id="intro" data-tags="はじめに 役割 統括 注意 事故 ルール">
+          <h2>はじめに <span class="pill">超重要</span></h2>
+          <div class="callout warn">
+            <b>私たちの仕事・大切なこと</b>
+            11月末の語劇祭模擬店において、学生と大学側（事務所・実行委員会）をつなぐことが統括の役割です。<br/>
+            この企画は新しいため、事故が起きると翌年以降の開催が危うくなる可能性があります。<b>予めのルール作り・注意喚起が最重要</b>です。
+          </div>
+        </section>
+
+        <section class="card section" id="flow" data-tags="基本 フロー 流れ 募集 企画書 申請 配置 シフト 設営 本番">
+          <h2>基本的な流れ</h2>
+          <ul class="list">
+            <li>募集（7月中頃から8月下旬まで）</li>
+            <li>企画書集め（1次締め切り：9月中頃／本締め切り：10月初旬）</li>
+            <li>施設利用や借用の申請</li>
+            <li>お店の配置決め</li>
+            <li>委員会の人のシフト＆フォーム作成</li>
+            <li>設営（前日）</li>
+            <li>本番</li>
+          </ul>
+        </section>
+
+        <!-- ★★★★★ ここが君の要望：抜け漏れゼロの周知 ★★★★★ -->
+        <section class="card section" id="notice" data-tags="本番前 周知 連絡 参加者 必須 売上 給湯ポット 看板 マグネット 1階 飲食禁止 電子決済 スクショ 前日設営 ルール違反 販売停止">
+          <h2>本番前：参加者への周知事項（抜け漏れゼロ） <span class="pill">コピペ可</span></h2>
+
+          <div class="callout ok">
+            <b>送る文章テンプレ（そのままLINE/メールに貼ってOK）</b>
+            <div class="muted">※必要なら「団体名」「日時」「集合」を追記してください。</div>
+          </div>
+
+          <div class="callout warn">
+            <b>① 売上の記録（全団体必須）</b>
+            「何円の商品を、何個売ったか」が分かる形で売上を記録してください。<br/>
+            例：250円×10個、300円×5個／セットA×8個／つかみ取り500円×12回…など<br/>
+            途中で価格や売り方を変えた場合も、<b>最終的に総売上が分かる形</b>でOKです。
+          </div>
+
+          <div class="callout danger">
+            <b>② 給湯ポット使用団体（超重要）</b>
+            <ul class="list">
+              <li>水は<b>必ず市販の水</b>を使用（安全・運用統一のため）</li>
+              <li>他団体のポットと混ざらないよう、<b>団体名の看板（紙など）を作って貼る</b></li>
+              <li>空焚き防止のため、使用中は<b>常に誰かが管理</b>する</li>
+            </ul>
+            <div class="muted">守られない場合、当日その場で使用停止になる可能性があります。</div>
+          </div>
+
+          <div class="callout warn">
+            <b>③ ホワイトボード利用団体</b>
+            <ul class="list">
+              <li>壁にポスターは貼れません（原則）</li>
+              <li>ホワイトボードに貼る形になるので、<b>マグネットは各自で用意</b>してください</li>
+            </ul>
+          </div>
+
+          <div class="callout danger">
+            <b>④ 1階で飲食物を販売する団体（必須周知）</b>
+            1階は飲食禁止エリアです。購入したお客さんに必ず、<br/>
+            <b>「このフロアでは飲食できません。3階などでお召し上がりください」</b>とお伝えください。<br/>
+            <div class="muted">違反が続く場合、販売方法の変更・注意・停止判断が入る可能性があります。</div>
+          </div>
+
+          <div class="callout warn">
+            <b>⑤ 電子決済を使う団体</b>
+            <ul class="list">
+              <li>電子決済は利用可能ですが、トラブル防止のため<b>現金でも支払い可能</b>にしてください</li>
+              <li>後日、<b>売上画面のスクリーンショット提出</b>をお願いする場合があります</li>
+            </ul>
+          </div>
+
+          <div class="callout warn">
+            <b>⑥ 前日設営（金曜夕方）</b>
+            参加者・委員会のみなさまは可能な範囲で設営のお手伝いをお願いします。<br/>
+            盗難の責任は負えませんが、前日から本格的に設営しても構いません。<br/>
+            既存設備を動かす場合は、事務所の確認を取ってください。
+          </div>
+
+          <div class="callout danger">
+            <b>⑦ 衛生・ルール違反は「その場で販売停止」になり得ます</b>
+            容器の差し替え・個包装ルール違反など、保健所や学内ルールに反する場合、<b>その場で即販売停止</b>になります。<br/>
+            迷ったら「事前に統括へ相談」を徹底してください。
+          </div>
+        </section>
+
+        <!-- 以降：君の全文マニュアルをこの形式で貼っていけばOK（必要なら俺が全文統合もできる） -->
+        <section class="card section" id="recruit" data-tags="募集 teams 説明会 申請フォーム LINE YouTube 名簿">
+          <h2>募集について（7月中旬〜下旬）</h2>
+          <div class="callout">
+            <b>あらかじめやるべきこと（要約）</b>
+            <ul class="list">
+              <li>運営LINEグループ作成、参加者用情報共有LINE作成</li>
+              <li>Teams導入（スマホ/PC）＋学内メールログイン</li>
+              <li>説明会スライド、Google Form（申請フォーム）</li>
+              <li>公式メアド＆YouTube（限定公開動画）</li>
+              <li>参加者リスト（Excel）管理</li>
+            </ul>
+          </div>
+          <div class="callout warn">
+            <b>注意</b>
+            Teamsの待機室ON、リハは複数人で実施（スライド共有・ゲスト入室・退室操作確認）。
+          </div>
+        </section>
+
+        <section class="card section" id="proposal" data-tags="企画書 フォーマット 締切 事務所 北岡先生 10月25日">
+          <h2>企画書のあれこれ（8月中旬）</h2>
+          <div class="callout warn">
+            <b>超要点</b>
+            10月初旬はデッドライン。初期稿は事務所の訂正が入るため、なるべく早く提出。<br/>
+            事務所訂正後の企画書を北岡先生へ（指摘重複を避ける）。
+          </div>
+        </section>
+
+        <section class="card section" id="docs" data-tags="借用申請 施設利用申請 家電機器持込申請 配置 机 椅子 延長コード ゴミ袋">
+          <h2>本番に向けた書類の準備（10月中旬）</h2>
+          <div class="callout warn">
+            <b>電話番号の0落ち注意</b>
+            Excelで先頭0が消える → <b>（0）70-xxxx-xxxx</b> 形式推奨。
+          </div>
+        </section>
+
+        <section class="card section" id="shift" data-tags="シフト 巡回 ゴミ 不審者 1階 飲食禁止 空焚き フォーム チェックリスト">
+          <h2>シフトの内容、決め方について（11月中旬）</h2>
+          <div class="callout">
+            <b>1時間ごとのタスク（要約）</b>
+            巡回＆確認／ゴミ確認＆依頼／飲食禁止・不審者確認／ポット空焚き確認。<br/>
+            1時間ずっと見回りではなく、<b>1時間に1回タスク消化</b>方式でOK。
+          </div>
+        </section>
+
+        <section class="card section" id="daybefore" data-tags="前日 設営 鍵 守衛 大講義室準備室 養生テープ マジック ゴミ箱 段ボール ゴミ袋">
+          <h2>前日準備</h2>
+          <div class="callout warn">
+            <b>ゴミ箱段ボールは金曜までに準備</b>
+            燃える/燃えない/ビンカンPET。1階2個・3階2個。燃えるゴミは多いので大きめ推奨。
+          </div>
+        </section>
+
+        <section class="card section" id="onsite" data-tags="本番当日 持ち物 テープ はさみ マジック 除菌ウェットティッシュ 販売停止 容器差し替え">
+          <h2>本番当日</h2>
+          <div class="callout">
+            <b>持っていくと安心</b>
+            カラー用紙／マジック／はさみ／テープ／除菌ウェットティッシュ（机が汚いこと多い）。
+          </div>
+          <div class="callout danger">
+            <b>即販売停止の判断</b>
+            容器の差し替えなど、ルール違反が発覚した場合はその場で販売停止。
+          </div>
+        </section>
+
+        <section class="card section" id="wrapup" data-tags="終了後 売上 回収 引き継ぎ 企画書">
+          <h2>終わりに</h2>
+          <div class="callout ok">
+            <b>完了条件</b>
+            各団体の売上回収／企画書引き継ぎ依頼で終了。
+          </div>
+        </section>
+
+        <section class="card section" id="faq" data-tags="疑問点 例外 前例 ホワイトボード コーヒー 個包装 水道 電気ポット コンセント 電子レンジ 冷蔵庫 占い 電子決済">
+          <h2>疑問点まとめ（抜粋）</h2>
+          <div class="callout">
+            <b>要点</b>
+            年度で変わる可能性があるため、イレギュラーは事務所へ報連相（前例があるなら添える）。<br/>
+            コーヒー・個包装・包み紙ねじりキャンディは要警戒。冷蔵庫不可、電子レンジは相談次第で可の可能性。
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+
+const pw = document.querySelector('input[type="password"]');
+const unlockBtn = document.querySelector('button');
+const err = document.getElementById("err");
+
+unlockBtn.addEventListener("click", () => tryUnlock());
+pw.addEventListener("keydown", e => {
+  if (e.key === "Enter") tryUnlock();
+});
+
+    let PASSWORD_HASH = "8b7293f6dd93853c83bf8c87ec5349a41789fa166a9431f108edb538e6fd82fd";
+
+    const LS_KEY = "gekisai_manual_authed_v1";
+
+    const lockScreen = document.getElementById("lockScreen");
+    const app = document.getElementById("app");
+    const err = document.getElementById("err");
+    const pw = document.getElementById("pw");
+    const remember = document.getElementById("remember");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const helpHashBtn = document.getElementById("helpHashBtn");
+
+    async function sha256Hex(str){
+      const enc = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      const arr = Array.from(new Uint8Array(buf));
+      return arr.map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+
+    function showApp(){
+      lockScreen.style.display = "none";
+      app.style.display = "block";
+      err.classList.remove("show");
+      // URLの#があればそこへ
+      if (location.hash) {
+        try { document.querySelector(location.hash)?.scrollIntoView({behavior:"smooth"}); } catch {}
+      }
+    }
+
+    function showLock(){
+      app.style.display = "none";
+      lockScreen.style.display = "block";
+      pw.value = "";
+      err.classList.remove("show");
+    }
+
+    async function tryUnlock(){
+      const val = (pw.value || "").trim();
+      if (!val) return;
+      const h = await sha256Hex(val);
+      if (h === PASSWORD_HASH){
+        if (remember.checked) localStorage.setItem(LS_KEY, "1");
+        showApp();
+      } else {
+        err.classList.add("show");
+      }
+    }
+
+    unlockBtn.addEventListener("click", tryUnlock);
+    pw.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryUnlock();
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem(LS_KEY);
+      showLock();
+    });
+
+    helpHashBtn.addEventListener("click", async () => {
+      const p = prompt("ハッシュ化したいパスワードを入力（この端末上でSHA-256にします）");
+      if (!p) return;
+      const h = await sha256Hex(p.trim());
+      alert("SHA-256（これをPASSWORD_HASHに貼る）:\n\n" + h);
+    });
+
+    // 自動ログイン（この端末で記憶 してる場合）
+    if (localStorage.getItem(LS_KEY) === "1"){
+      showApp();
+    } else {
+      showLock();
+    }
+
+    // 時系列ボタン：data-jump
+    document.querySelectorAll(".tbtn[data-jump]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const sel = btn.getAttribute("data-jump");
+        const el = document.querySelector(sel);
+        if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    });
+
+    // 検索
+    const q = document.getElementById("q");
+    const results = document.getElementById("results");
+
+    function textOf(el){
+      return (el.innerText || el.textContent || "").replace(/\s+/g," ").trim();
+    }
+
+    function buildResults(items, keyword){
+      results.innerHTML = "";
+      if (!keyword){
+        results.classList.remove("active");
+        return;
+      }
+      if (items.length === 0){
+        results.classList.add("active");
+        results.innerHTML = `<div class="card"><h2>検索結果</h2><div class="muted">「${keyword}」に一致する項目がありません。</div></div>`;
+        return;
+      }
+      results.classList.add("active");
+      const head = document.createElement("div");
+      head.className = "card";
+      head.innerHTML = `<h2>検索結果 <span class="pill">${items.length}件</span></h2><div class="muted">クリックで該当箇所へ移動します。</div>`;
+      results.appendChild(head);
+
+      items.slice(0, 25).forEach(sec=>{
+        const id = sec.id;
+        const title = sec.querySelector("h2") ? textOf(sec.querySelector("h2")) : id;
+        const snippet = textOf(sec).slice(0, 140) + "…";
+        const div = document.createElement("div");
+        div.className = "resultItem";
+        div.innerHTML = `<b>${escapeHtml(title)}</b><small>${escapeHtml(snippet)}</small>`;
+        div.addEventListener("click", ()=>{
+          location.hash = "#" + id;
+          sec.scrollIntoView({behavior:"smooth", block:"start"});
+        });
+        results.appendChild(div);
+      });
+    }
+
+    function escapeHtml(s){
+      return s.replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[c]));
+    }
+
+    function doSearch(){
+      const keyword = (q.value || "").trim();
+      if (!keyword){
+        buildResults([], "");
+        return;
+      }
+      const low = keyword.toLowerCase();
+      const secs = Array.from(document.querySelectorAll(".section[id]"));
+      const hits = secs.filter(sec=>{
+        const tags = (sec.getAttribute("data-tags") || "").toLowerCase();
+        const t = textOf(sec).toLowerCase();
+        return tags.includes(low) || t.includes(low);
+      });
+      buildResults(hits, keyword);
+    }
+
+    q?.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter") doSearch();
+    });
+
+// ===== iOS Safari / Mobile fix =====
+document.addEventListener("DOMContentLoaded", () => {
+  if (unlockBtn && pw) {
+    unlockBtn.onclick = () => tryUnlock();
+    pw.addEventListener("keydown", e => {
+      if (e.key === "Enter") tryUnlock();
+    });
+  }
+});
+
+  </script>
+</body>
+</html>
