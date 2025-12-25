@@ -1,0 +1,1259 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>語劇祭 模擬店 統括マニュアル</title>
+
+<style>
+
+.toc{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:16px;
+}
+.toc a{
+  padding:8px 14px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  color:black;
+  font-weight:800;
+  text-decoration:none;
+  font-size:14px;
+}
+
+:root{
+  --bg:#12061c;
+  --card:#2a0f45;
+  --card2:#1b0b2f;
+  --txt:#fff3fb;
+  --muted:#f2b3ff;
+  --line:rgba(255,255,255,.25);
+
+  /* お祭りカラー */
+  --accent:#ffcc33;
+  --accent2:#ff6bd6;
+  --accent3:#55e0ff;
+  --danger:#ff5c5c;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(1200px 700px at 20% 0%, #0f1b3a 0%, var(--bg) 55%) fixed;
+  color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",system-ui;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:20px}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.35);
+}
+h1{margin:0;font-size:26px}
+.sub{color:var(--muted);margin:6px 0 16px}
+.hr{height:1px;background:var(--line);margin:14px 0}
+
+#app{display:none}
+
+.row{display:flex;gap:10px;align-items:center}
+input{
+  flex:1;padding:14px;border-radius:12px;
+  border:1px solid var(--line);
+  background:#0002;color:var(--txt);font-size:16px
+}
+button{
+  padding:12px 14px;border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(122,162,255,.18);
+  color:var(--txt);font-weight:700
+}
+.err{color:var(--danger);display:none;margin-top:10px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:14px;
+}
+
+details{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  overflow:hidden;
+}
+summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px 16px;
+  background:rgba(122,162,255,.18);
+  font-weight:800;
+}
+details[open] summary{
+  background:rgba(122,162,255,.32);
+}
+.section{
+  padding:14px 16px;
+}
+.small{color:var(--muted);font-size:13px}
+.warn{color:var(--danger);font-weight:800}
+
+.searchBox{
+  margin:16px 0 20px;
+  padding:12px;
+  background:linear-gradient(135deg,var(--card2),var(--card));
+  border-radius:16px;
+  border:1px solid var(--line);
+}
+.searchBox input{
+  width:100%;
+  font-size:16px;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:#00000055;
+  color:white;
+}
+#searchInfo{
+  margin-top:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+mark{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:black;
+  padding:2px 4px;
+  border-radius:4px;
+}
+
+.searchNav{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:10px;
+}
+.searchNav button{
+  padding:8px 12px;
+  border-radius:10px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  color:black;
+  font-weight:800;
+}
+.searchNav button:active{transform:scale(.95)}
+
+
+#searchNavFloating{
+  position:fixed;
+  right:14px;
+  bottom:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:9999;
+}
+#searchNavFloating button{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:black;
+  font-size:22px;
+  font-weight:900;
+  box-shadow:0 8px 20px rgba(0,0,0,.4);
+}
+#searchNavFloating button:active{transform:scale(.92)}
+
+</style>
+</head>
+
+
+
+<body>
+<div class="wrap">
+
+<!-- LOCK -->
+<div id="lock" class="card">
+  <h1>🔒 語劇祭 模擬店 統括マニュアル</h1>
+  <p class="sub">関係者のみ閲覧できます</p>
+  <div class="row">
+    <input id="pw" type="password" placeholder="パスワード">
+    <button id="go">開く</button>
+  </div>
+  <div id="err" class="err">パスワードが違います</div>
+</div>
+
+<!-- APP -->
+
+<div id="app" style="display:none">
+
+<div class="toc">
+  <a href="#island1">流れ</a>
+  <a href="#island2">募集</a>
+  <a href="#island3">書類</a>
+  <a href="#island4">企画書</a>
+  <a href="#island5">物品</a>
+  <a href="#island6">シフト</a>
+  <a href="#island7">前日</a>
+  <a href="#island8">本番</a>
+</div>
+
+ 
+　
+  <div class="card">
+    <h1>語劇祭 模擬店 統括マニュアル</h1>
+
+  <div class="searchBox">
+  <input id="searchInput" placeholder="🔍 キーワード検索（ゴミ袋 / ポット / 電話番号 など）">
+  <span id="searchInfo"></span>
+</div>
+
+    <p class="sub">島ごとに開いて、必要なところだけ読む</p>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="grid">
+
+<!-- CONTENT START -->
+
+<!-- ISLAND 1 -->
+
+<section class="island" id="island1">
+<h2>🎯 私たちの仕事・大切なこと</h2>
+
+<p>
+11月末の語劇祭模擬店において、<b>学生と大学側をつなぐこと</b>が私たちの役割です。<br>
+実際の社会でもこの役割を担う人は多く、非常に実務的で貴重な経験になります。
+</p>
+
+<p>
+また「統括」という肩書きは字面のインパクトが強く、<b>ガクチカにもかなり使えます。</b>
+</p>
+
+<div class="note">
+この模擬店はまだ2年目の新しい企画です。<br>
+大きな事故が起きると、<b>来年以降なくなる可能性があります。</b><br>
+だからこそ、<b>ルール作りと注意喚起が最重要</b>です。
+</div>
+
+</section>
+
+<!-- ISLAND 2 -->
+
+<section class="island" id="island2">
+
+<h2>🗺 基本的な流れ（年間スケジュール）</h2>
+
+<p>まずは全体像をつかんでください。だいたいこの流れで進みます。</p>
+
+<ul class="timeline">
+<li><b>7月中頃〜8月下旬</b>：募集</li>
+<li><b>9月中旬</b>：企画書 1次締切</li>
+<li><b>10月初旬</b>：企画書 本締切</li>
+<li><b>10月中旬</b>：施設利用・物品借用・家電申請</li>
+<li><b>11月中旬</b>：シフト決定</li>
+<li><b>本番前日（金）</b>：設営</li>
+<li><b>語劇祭当日</b>：運営・巡回</li>
+<li><b>2日目夜</b>：撤収・返却</li>
+</ul>
+
+<div class="note">
+ナナメ読みするときは、この流れと「今どこ？」を常に意識してください。<br>
+必要な作業はこのスケジュールにすべて紐づいています。
+</div>
+
+</section>
+
+<!-- ISLAND 3 -->
+
+<section class="island" id="island3">
+
+<h2>📣 募集・説明会・申請の流れ</h2>
+
+<h3>まず最初にやる準備</h3>
+<ul>
+<li>運営用LINEグループを作る</li>
+<li>Teamsをスマホ・PC両方に入れて学内メールでログイン</li>
+<li>説明会用スライドを用意</li>
+<li>Google Form（参加申請フォーム）を作成</li>
+<li>公式メールアドレスとYouTubeチャンネルを作成（前年引き継ぎ可）</li>
+<li>参加者用の情報共有LINEグループを作成</li>
+<li>参加団体を管理するExcelを用意</li>
+</ul>
+
+<div class="note">
+Teamsは事務所との連絡・説明会の両方に使います。  
+全メンバーに「スマホ＋PC両方」で入れるよう周知してください。
+</div>
+
+<hr>
+
+<h3>募集の基本フロー</h3>
+<ol>
+<li>事務所から学部全体にメール配信</li>
+<li>Teamsでオンライン説明会を実施</li>
+<li>Google Formから参加申請</li>
+</ol>
+
+<div class="note">
+去年は説明会に出なくても申請できましたが、  
+実際は説明会を見ない人はほぼ申請しません。  
+「説明会後に申請」としてOKです。
+</div>
+
+<hr>
+
+<h3>名簿の集め方</h3>
+<p>LINEグループのノート機能で以下を集めます。</p>
+<ul>
+<li>名前（よみがな）</li>
+<li>学内メールアドレス</li>
+</ul>
+
+<p>これがないと事務所・Teams・連絡がすべて詰みます。</p>
+
+<hr>
+
+<h3>事務所との接続（北岡先生経由）</h3>
+<ul>
+<li>顧問の北岡先生に、事務所の方と繋いでもらう</li>
+<li>Teamsで事務所とやり取り開始</li>
+</ul>
+
+<p>説明会もTeamsで行うため、</p>
+<ul>
+<li>ルーム作成</li>
+<li>待機室ON（荒らし防止）</li>
+<li>リハーサル（複数人で）</li>
+</ul>
+を必ず事前に確認してください。
+
+<hr>
+
+<h3>説明会の運営</h3>
+<ul>
+<li>表示名は「専攻語＋学年＋名前」に設定してもらう</li>
+<li>顔出しは任意だが、できるだけお願いする</li>
+<li>録画はしなくてOK（後日撮り直せばよい）</li>
+</ul>
+
+<hr>
+
+<h3>配信メール（事務所経由）</h3>
+<p>Teamsで事務所に送る文面に必ず入れる：</p>
+<ul>
+<li>説明会のURL</li>
+<li>ルームIDとパスワード（リンク不具合対策）</li>
+<li>申請フォームURL</li>
+</ul>
+
+<div class="note">
+ルームは毎回新規作成されるので、  
+パスワード公開してもセキュリティ問題なし。
+</div>
+
+<hr>
+
+<h3>申請フォームの必須項目</h3>
+<p><b>代表・副代表について必須：</b></p>
+<ul>
+<li>名前</li>
+<li>専攻と学年（日本語専攻の書き方例も記載）</li>
+<li>電話番号</li>
+</ul>
+
+<p><b>代表者のメールアドレス</b>も必須（学内 or 私用どちらでも可）  
+→ LINE共有グループのQRをここに送る。</p>
+
+<p>最後に：</p>
+<ul>
+<li>その他・質問欄（任意）</li>
+</ul>
+
+<hr>
+
+<h3>二次募集</h3>
+<ul>
+<li>理想：12団体前後</li>
+<li>多すぎると1F・3Fに入りきらない</li>
+</ul>
+
+<p>二次募集時：</p>
+<ul>
+<li>説明会動画をYouTubeに限定公開でアップ</li>
+<li>URLを配信メールに載せる</li>
+<li>フォームに「動画を見た人しか答えられないクイズ」を追加</li>
+</ul>
+
+</section>
+
+<!-- ISLAND 4 -->
+
+<section class="island" id="island4">
+
+<h2>📄 企画書の回収と修正フロー</h2>
+
+<p>
+ここが一番大変で、事故りやすい部分です。  
+実務ではこの島と「疑問点まとめ」を行ったり来たりすることになります。
+</p>
+
+<hr>
+
+<h3>企画書フォーマット</h3>
+<ul>
+<li>最初の統括が作ったフォーマットを代々使用</li>
+<li>LINEグループに配布</li>
+</ul>
+
+<div class="note">
+LINEのファイルは期限切れになるので、  
+「すぐダウンロードしてください」と必ず一言添えること。
+</div>
+
+<hr>
+
+<h3>スケジュール</h3>
+<ul>
+<li>8月中旬：フォーマット配布</li>
+<li>9月中旬：一次締切（仮）</li>
+<li>10月初旬：事務所へのデッドライン</li>
+<li>10月25日前後：北岡先生の最終チェック完了</li>
+</ul>
+
+<p>
+一次稿は事務所から赤入れだらけで返ってきます。  
+<b>早く出すことが最大のリスク回避</b>です。
+</p>
+
+<hr>
+
+<h3>チェックの順番</h3>
+<ol>
+<li>事務所で訂正</li>
+<li>訂正後のものを北岡先生に回す</li>
+</ol>
+
+<p>同時に出すと指摘が二重になって地獄になります。</p>
+
+<hr>
+
+<h3>管理Excelの作成</h3>
+<p>以下を管理すると楽になります：</p>
+<ul>
+<li>団体番号</li>
+<li>専攻</li>
+<li>代表者</li>
+<li>事務所チェック済み</li>
+<li>北岡先生チェック済み</li>
+</ul>
+
+<div class="note">
+団体ごとに番号を振ると、  
+事務所・こちら双方の作業が一気に楽になります。
+</div>
+
+<hr>
+
+<h3>よくある修正ポイント（超重要）</h3>
+<ul>
+<li>飲み物の扱い</li>
+<li>食品の包装方法</li>
+<li>調理工程の書き方</li>
+<li>水・電気の使い方</li>
+</ul>
+
+<p>
+フォーマット配布時点で  
+「飲み物は特に厳しい」など注意喚起しておくと修正が減ります。
+</p>
+
+<hr>
+
+<h3>ファイルの出し方</h3>
+<p>
+事務所の人に見てもらう時は：
+</p>
+<ul>
+<li>企画書</li>
+<li>補足資料</li>
+<li>画像</li>
+</ul>
+
+<p>
+これらを<b>1つのフォルダにまとめて提出</b>してください。
+</p>
+
+<hr>
+
+<h3>企画書タイトル</h3>
+<p>
+事務所はタイトルの先頭に番号を振っています。  
+こちらも合わせて：
+</p>
+
+<pre>01_◯◯語専攻
+02_◯◯語専攻</pre>
+
+<p>のようにして出すと管理しやすくなります。</p>
+
+</section>
+
+<!-- ISLAND 5 -->
+
+<section class="island" id="island5">
+
+<h2>📦 本番に向けた書類・物品・配置</h2>
+
+<p>
+この島を落とすと、当日<strong>机が足りない・ゴミが捨てられない・電気が使えない</strong>という地獄になります。
+</p>
+
+<hr>
+
+<h3>借用申請（語劇祭委員会Teams）</h3>
+<p>指定フォーマットを使用します。</p>
+
+<ul>
+<li>統括の電話番号・学生番号</li>
+<li>各専攻リーダーの名前・学生番号・電話番号・メール</li>
+<li>各専攻ごとの机・椅子・家電の内訳</li>
+<li><b>一番下に合計</b></li>
+</ul>
+
+<div class="warn">
+Excelの電話番号は先頭の0が消えます。  
+必ず <b>（0）70-xxxx-xxxx</b> のように記入！
+</div>
+
+<hr>
+
+<h3>机と椅子のルール</h3>
+<ul>
+<li>基本：机1、椅子3</li>
+<li>追加が欲しい団体は個別申告</li>
+<li>家電使用団体は延長コード必須</li>
+</ul>
+
+<p>
+返却時刻・貸出時刻は全団体で共通に設定します。
+</p>
+
+<hr>
+
+<h3>長机の制限</h3>
+<p>
+長机は <b>最大12台</b> しか使えません。
+</p>
+
+<ul>
+<li>語劇委員会の受付などでも消費される</li>
+<li>足りない場合は「普通の机×2」で代用</li>
+</ul>
+
+<div class="warn">
+電気ポットを置く机の数を忘れがち！  
+各専攻に1台ずつ確保するのが安全。
+また、各専攻ごとに延長ケーブル（ドラム缶）が1つ必用。
+</div>
+
+<hr>
+
+<h3>ゴミ袋の申告（超重要）</h3>
+<p>
+借用申請を聞くときに必ず：
+</p>
+<ul>
+<li>店舗用にゴミ袋を使うか</li>
+</ul>
+<p>も一緒に聞いてください。</p>
+
+<hr>
+
+<h3>施設利用申請</h3>
+<ul>
+<li>使用場所：1階・3階 エントランスホール</li>
+<li>見たまま記入でOK</li>
+</ul>
+
+<p>
+可能なら<strong>模擬店用控室</strong>を1室借りると便利（物置になる）。
+</p>
+
+<hr>
+
+<h3>家電機器持込</h3>
+<p>事務所から指示がなければ以下を聞く：</p>
+<ul>
+<li>何の家電か</li>
+<li>ワット数</li>
+</ul>
+
+<div class="warn">
+1団体1台まで／約1000Wが上限
+</div>
+
+<hr>
+
+<h3>配置の基本</h3>
+<ul>
+<li>最大12団体</li>
+<li>1階6団体・3階6団体が理想</li>
+</ul>
+
+<p>
+去年は：
+</p>
+<ul>
+<li>1階：スカスカ</li>
+<li>3階：ギチギチ</li>
+</ul>
+
+<hr>
+
+<h3>3階の制限</h3>
+<ul>
+<li>使えるのはエントランスの半分まで</li>
+<li>階段前は絶対NG</li>
+<li>受付と食堂入口は塞いでOK</li>
+</ul>
+
+<p>
+机を多く使う団体は2階にまとめる案もあり。
+</p>
+
+<hr>
+
+<h3>1階のルール</h3>
+<ul>
+<li>飲食禁止</li>
+<li>非飲食系を配置</li>
+</ul>
+
+<hr>
+
+<h3>ゴミ袋の確保</h3>
+<p>
+語劇委員会幹部に：
+</p>
+<ul>
+<li>1階と3階のゴミ箱用</li>
+<li>合計20枚程度</li>
+</ul>
+<p>を分けてもらう。</p>
+
+<div class="note">
+去年の余りが倉庫（ホワイトボード・延長コードの部屋）に残っているはず。
+</div>
+
+<hr>
+
+<h3>名簿</h3>
+<p>
+去年から学生証で出入り可能なので、  
+<b>名簿の提出は不要</b>。  
+参加人数だけ把握すればOK。
+</p>
+
+</section>
+
+<!-- ISLAND 6 -->
+
+<section class="island" id="island6">
+
+<h2>🕒 シフトと巡回業務（現場の心臓）</h2>
+
+<p>
+11月中旬になったら、沈黙していた模擬店委員会LINEを動かします。
+</p>
+
+<hr>
+
+<h3>シフトでやること</h3>
+<ul>
+<li>全団体が企画書通りに販売しているか巡回</li>
+<li>1階・3階のゴミ袋の量を確認</li>
+<li>満杯ならその団体に捨ててもらう</li>
+<li>誰が捨てたかを記録</li>
+<li>1階の飲食禁止の確認</li>
+<li>不審者がいないか入口確認</li>
+<li>電気ポットの空焚きチェック</li>
+</ul>
+
+<div class="note">
+ずっと巡回し続ける必要はありません。  
+「1時間に1回、このチェックリストを消化する」運用です。
+</div>
+
+<hr>
+
+<h3>チェックリストの作成</h3>
+<p>
+以下を含んだチェック表を作成：
+</p>
+<ul>
+<li>団体名（伏字でもOK）</li>
+<li>ゴミ捨て有無</li>
+<li>問題あり／なし</li>
+<li>担当者</li>
+</ul>
+
+<p>
+形式は
+</p>
+<ul>
+<li>Googleフォーム</li>
+<li>紙（バインダーで管理）</li>
+</ul>
+<p>どちらでもOK。</p>
+
+<div class="note">
+紙の場合は3階受付の机の下に保管。
+</div>
+
+<hr>
+
+<h3>ゴミ捨ての割り振り</h3>
+<p>
+各団体の出店時間を見ながら、  
+事前にゴミ捨て担当を割り当てます。
+</p>
+
+<p>
+ゴミ箱は毎時間満杯になるわけではないので、
+</p>
+<ul>
+<li>スキップされる団体が必ず出る</li>
+</ul>
+
+<hr>
+
+<h3>2日目の調整</h3>
+<p>
+2日目のゴミ捨てシフトでは：</p>
+<ul>
+<li>1日目に捨てた団体 → 外す</li>
+<li>スキップされた団体 → 入れる</li>
+</ul>
+
+<p>
+これで不公平がなくなります。
+</p>
+
+<hr>
+
+<h3>語劇祭委員会との連携</h3>
+<p>
+模擬店委員会のメンバーは、  
+語劇祭委員会のシフトにも入っていることが多い。
+</p>
+
+<div class="warn">
+シフト衝突を避けるため、必ず語劇委員会と調整！
+</div>
+
+<hr>
+
+<h3>スケジュール</h3>
+<ul>
+<li>語劇開始1週間前（月〜金）に希望回収</li>
+<li>週末に語劇委員会と調整</li>
+<li>月曜日に最終シフト発表</li>
+</ul>
+
+</section>
+
+<!-- ISLAND 7 -->
+
+<section class="island" id="island7">
+
+<h2>🛠 前日準備（ここを落とすと全滅）</h2>
+
+<p>
+本番1週間前までに以下は完了している必要があります：
+</p>
+<ul>
+<li>シフトの発表</li>
+<li>施設利用申請・物品借用申請の提出</li>
+</ul>
+
+<hr>
+
+<h3>参加者への最終連絡</h3>
+<ul>
+<li>売上の記録を取ること</li>
+<li>給湯ポット使用団体 → 市販の水を自分で用意</li>
+<li>ホワイトボード使用団体 → マグネットを自分で用意</li>
+</ul>
+
+<div class="warn">
+給湯ポット使用団体には  
+「他団体と混ざらないように看板を作ること」も必ず指示！
+</div>
+
+<hr>
+
+<h3>1階の注意</h3>
+<p>
+1階は飲食禁止なので、販売時はお客さんにも伝えてもらいます。
+</p>
+
+<hr>
+
+<h3>前日設営の案内</h3>
+<p>
+月曜ごろに以下を全員に通知：</p>
+<ul>
+<li>金曜夕方に設営を手伝ってほしい</li>
+<li>盗難の責任は負えないが、前日から設営してもOK</li>
+</ul>
+
+<p>
+1階・3階エントランスホールは人通りがあっても並べてOK。  
+設備を動かす場合は事務所に一言確認。
+</p>
+
+<hr>
+
+<h3>必要物品</h3>
+<ul>
+<li>養生テープ</li>
+<li>マジックペン</li>
+</ul>
+
+<p>（事務所から借りられることが多い）</p>
+
+<hr>
+
+<h3>机と椅子の搬出</h3>
+<ol>
+<li>事務所経由で守衛から鍵を借りる</li>
+<li>大講義室準備室から机と椅子を出す</li>
+<li>借用品に養生テープを貼る</li>
+<li>マジックで団体名を書く</li>
+</ol>
+
+<hr>
+
+<h3>ゴミ箱の準備（超重要）</h3>
+<p>
+金曜日までに段ボールでゴミ箱を作る：
+</p>
+
+<ul>
+<li>燃えるゴミのゴミ袋×3</li>
+<li>燃えないゴミのゴミ袋×2</li>
+<li>ビン・缶・ペットボトルのゴミ袋×2</li>
+</ul>
+
+<p>
+1階用・3階用でそれぞれ用意。
+</p>
+
+<div class="warn">
+燃えるゴミは一番多い → 大きめ段ボールを使う！
+</div>
+
+<hr>
+
+<h3>忘れた場合</h3>
+<p>
+学校のゴミ置き場から段ボールをもらえる。  
+鍵が必要なので事務所に依頼。
+</p>
+
+<hr>
+
+<h3>ゴミ袋の設置</h3>
+<p>
+ゴミ袋は段ボールの底にまとめて入れておく。  
+補充に走らなくて済む。
+</p>
+
+<p>
+余りは3階受付の机の下へ。
+</p>
+
+<hr>
+
+<h3>捨て場所の共有</h3>
+<p>
+委員会メンバーに  
+「ゴミ袋はどこに捨てるか」も必ず共有。
+</p>
+
+<p>
+去年は1階の階段下でした。
+</p>
+
+</section>
+
+<!-- ISLAND 8 -->
+
+<section class="island" id="island8">
+
+<h2>🎪 本番当日の動きと終了処理</h2>
+
+<hr>
+
+<h3>当日持ち物（統括）</h3>
+<ul>
+<li>カラー用紙（看板忘れ対応）</li>
+<li>マジックペン</li>
+<li>ハサミ</li>
+<li>テープ</li>
+<li>除菌ウェットティッシュ</li>
+</ul>
+
+<div class="note">
+机が非常に汚い。  
+夏までは売り切った後に机で踊る人がいたレベル。
+</div>
+
+<hr>
+
+<h3>1日目</h3>
+<p>
+基本はシフトを回すだけ。
+</p>
+<ul>
+<li>巡回</li>
+<li>ゴミ捨て記録</li>
+<li>違反チェック</li>
+</ul>
+
+<p>
+1日目終了時に：
+</p>
+<ul>
+<li>ゴミを捨てた団体を把握</li>
+<li>2日目のゴミ捨てシフトを調整</li>
+</ul>
+
+<hr>
+
+<h3>違反が発覚した場合</h3>
+<p>
+以下が見つかった場合：
+</p>
+<ul>
+<li>容器の差し替え</li>
+<li>衛生ルール違反</li>
+</ul>
+
+<div class="warn">
+即販売停止。  
+保健所ルール違反は一発アウト。
+</div>
+
+<p>
+まともな団体なら事前に相談してきます。
+</p>
+
+<hr>
+
+<h3>2日目の撤収</h3>
+<p>
+19:30までに完全撤収が必須。
+</p>
+
+<p>
+17時以降に撤収する団体には：</p>
+<ul>
+<li>自分の荷物運び</li>
+<li>机や物品の片付け</li>
+</ul>
+<p>を手伝ってもらう。</p>
+
+<div class="warn">
+すべて揃うまで養生テープを剥がさない！
+</div>
+
+<p>
+ホワイトボードなどは写真を撮って証拠を残せばOK。
+</p>
+
+<hr>
+
+<h3>物品が揃ったら</h3>
+<p>
+事務所に報告。
+</p>
+
+<hr>
+
+<h3>終了処理</h3>
+<ul>
+<li>各団体の売上を回収</li>
+<li>企画書の引き継ぎを依頼</li>
+</ul>
+
+<p>
+売上の書き方は：
+</p>
+<ul>
+<li>250円 ×◯個</li>
+<li>300円 ×◯個</li>
+<li>セット ◯個</li>
+<li>つかみ取り 500円 ×◯回</li>
+</ul>
+
+<p>
+など、総売上が分かればOK。
+</p>
+
+<p>
+これで統括業務は終了。  
+お疲れさまでした。
+</p>
+
+</section>
+
+<!-- ISLAND 9 -->
+<details>
+<summary>🕒 シフト管理</summary>
+<div class="section">
+
+<b>毎時間やること</b>
+<ul>
+<li>全団体が企画書通り営業しているか巡回</li>
+<li>ゴミ袋が満杯なら団体に捨ててもらう（記録）</li>
+<li>1階飲食禁止・不審者チェック</li>
+<li>電気ポット空焚き確認</li>
+</ul>
+
+<p class="small">
+1時間ずっと見回るのではなく「1時間に1回このチェック」を実施。
+</p>
+
+<b>記録方法</b>
+<p>
+Googleフォーム or 紙。  
+紙の場合はバインダーに入れて3階受付机の下。
+</p>
+
+<b>ゴミ当番</b>
+<p>
+2日目は1日目に捨てた団体を除外し、未実施団体を優先。
+</p>
+
+<b>シフト決定</b>
+<p>
+語劇委員会と連携。  
+本番1週間前（月〜金で集計→週末調整→月曜発表）
+</p>
+
+</div>
+</details>
+
+<!-- ISLAND 10 -->
+<details>
+<summary>🛠 前日設営</summary>
+<div class="section">
+
+<p>
+金曜夕方に設営。盗難責任なしで前日から本設営OKと周知。
+</p>
+
+<b>必要な物</b>
+<ul>
+<li>養生テープ</li>
+<li>マジック</li>
+</ul>
+
+<b>物品管理</b>
+<p>
+机・椅子・ホワイトボードに養生テープで団体名を書く。
+</p>
+
+<b>ゴミ箱設置</b>
+<p>
+段ボールを金曜までに準備。  
+ゴミ袋は底にストック。
+</p>
+
+<b>ゴミ捨て場所</b>
+<p>1階階段下</p>
+
+</div>
+</details>
+
+
+<!-- ISLAND 12 -->
+<details>
+<summary>📚 終了後 & よくある質問</summary>
+<div class="section">
+
+<b>終了処理</b>
+<ul>
+<li>売上回収（内訳OK）</li>
+<li>企画書引き継ぎ回収</li>
+</ul>
+
+<b>水を利用する専攻</b>
+<ul>
+<li>給湯ポットの水は市販の水対応</li>
+<li>コイン落としなどの出し物用の水は、3階のヨギボールーム隣の調理室を使うので、鍵を事務所に申請</li>
+</ul>
+
+<b>食品ルール</b>
+<ul>
+<li>個包装必須</li>
+<li>キャンディ型NG</li>
+<li>コーヒー・ティーバッグ要注意</li>
+</ul>
+
+<b>掲示物</b>
+<p>
+壁NG → ホワイトボード使用  
+マグネットは各団体用意
+</p>
+
+<b>電子決済</b>
+<p>
+使用可。ただし現金併用＋後日スクショ提出
+</p>
+
+<b>占い</b>
+<p>
+有料OK。内容確認＋大声NG
+</p>
+
+</div>
+</details>
+
+
+<!-- CONTENT END -->
+
+  </div>
+</div>
+
+</div>
+
+<script>
+
+// ===== PASSWORD LOCK =====
+const HASH="8b7293f6dd93853c83bf8c87ec5349a41789fa166a9431f108edb538e6fd82fd";
+
+async function sha256(t){
+  const b=new TextEncoder().encode(t);
+  const h=await crypto.subtle.digest("SHA-256",b);
+  return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+
+document.getElementById("go").onclick=async()=>{
+  const p=document.getElementById("pw").value;
+  if(await sha256(p)===HASH){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("app").style.display="block";
+  }else{
+    document.getElementById("err").style.display="block";
+  }
+};
+
+// ===== Search Engine (safe version) =====
+const searchInput = document.getElementById("searchInput");
+const searchInfo = document.getElementById("searchInfo");
+
+let hits = [];
+let hitIndex = -1;
+
+function clearMarks(){
+  document.querySelectorAll("mark").forEach(m=>{
+    const text = document.createTextNode(m.textContent);
+    m.replaceWith(text);
+  });
+}
+
+function getTextNodes(root){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  let n;
+  while(n = walker.nextNode()){
+    if(n.parentElement && !["SCRIPT","STYLE","MARK"].includes(n.parentElement.tagName)){
+      nodes.push(n);
+    }
+  }
+  return nodes;
+}
+
+function highlight(query){
+  clearMarks();
+  hits=[];
+  hitIndex=-1;
+
+  if(!query){
+    searchInfo.textContent="";
+    return;
+  }
+
+  const regex = new RegExp(query,"gi");
+
+  document.querySelectorAll(".island, details").forEach(area=>{
+    const nodes = getTextNodes(area);
+
+    nodes.forEach(node=>{
+      const text = node.textContent;
+      if(!regex.test(text)) return;
+
+      const frag = document.createDocumentFragment();
+      let last = 0;
+
+      text.replace(regex,(m,idx)=>{
+        frag.append(text.slice(last,idx));
+        const mark = document.createElement("mark");
+        mark.textContent = m;
+        frag.append(mark);
+        hits.push(mark);
+        last = idx + m.length;
+      });
+
+      frag.append(text.slice(last));
+      node.replaceWith(frag);
+    });
+  });
+
+  searchInfo.textContent = `${hits.length} 件ヒット`;
+}
+
+// 検索してもジャンプしない
+searchInput.addEventListener("input",()=>{
+  highlight(searchInput.value.trim());
+});
+
+// ===== Floating navigation buttons =====
+const nav = document.createElement("div");
+nav.id="searchNavFloating";
+nav.innerHTML = `
+  <button id="prevHit">⬆</button>
+  <button id="nextHit">⬇</button>
+`;
+document.body.appendChild(nav);
+
+function scrollToHit(i){
+  if(!hits[i]) return;
+  hits.forEach(h=>h.style.outline="none");
+  hits[i].scrollIntoView({behavior:"smooth",block:"center"});
+  hits[i].style.outline="3px solid var(--accent)";
+}
+
+document.getElementById("nextHit").onclick=()=>{
+  if(!hits.length) return;
+  hitIndex = (hitIndex+1) % hits.length;
+  scrollToHit(hitIndex);
+};
+document.getElementById("prevHit").onclick=()=>{
+  if(!hits.length) return;
+  hitIndex = (hitIndex-1+hits.length) % hits.length;
+  scrollToHit(hitIndex);
+};
+</script>
+
+</body>
+</html>
